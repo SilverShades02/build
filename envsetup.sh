@@ -137,6 +137,14 @@ function check_product()
         echo "Couldn't locate the top of the tree.  Try setting TOP." >&2
         return
     fi
+    if (echo -n $1 | grep -q -e "^lluvia_") ; then
+        CUSTOM_BUILD=$(echo -n $1 | sed -e 's/^lluvia_//g')
+        export BUILD_NUMBER=$( (date +%s%N ; echo $CUSTOM_BUILD; hostname) | openssl sha1 | sed -e 's/.*=//g; s/ //g' | cut -c1-10 )
+    else
+        CUSTOM_BUILD=
+    fi
+    export CUSTOM_BUILD
+
         TARGET_PRODUCT=$1 \
         TARGET_BUILD_VARIANT= \
         TARGET_BUILD_TYPE= \
@@ -432,7 +440,7 @@ function chooseproduct()
     if [ "x$TARGET_PRODUCT" != x ] ; then
         default_value=$TARGET_PRODUCT
     else
-        default_value=aosp_arm
+        default_value=lluvia_arm
     fi
 
     export TARGET_BUILD_APPS=
@@ -550,12 +558,12 @@ function add_lunch_combo()
 }
 
 # add the default one here
-add_lunch_combo aosp_arm-eng
-add_lunch_combo aosp_arm64-eng
-add_lunch_combo aosp_mips-eng
-add_lunch_combo aosp_mips64-eng
-add_lunch_combo aosp_x86-eng
-add_lunch_combo aosp_x86_64-eng
+add_lunch_combo lluvia_arm-eng
+add_lunch_combo lluvia_arm64-eng
+add_lunch_combo lluvia_mips-eng
+add_lunch_combo lluvia_mips64-eng
+add_lunch_combo lluvia_x86-eng
+add_lunch_combo lluvia_x86_64-eng
 
 function print_lunch_menu()
 {
@@ -584,7 +592,7 @@ function lunch()
         answer=$1
     else
         print_lunch_menu
-        echo -n "Which would you like? [aosp_arm-eng] "
+        echo -n "Which would you like? [lluvia_arm-eng] "
         read answer
     fi
 
@@ -592,7 +600,7 @@ function lunch()
 
     if [ -z "$answer" ]
     then
-        selection=aosp_arm-eng
+        selection=lluvia_arm-eng
     elif (echo -n $answer | grep -q -e "^[0-9][0-9]*$")
     then
         if [ $answer -le ${#LUNCH_MENU_CHOICES[@]} ]
@@ -622,6 +630,8 @@ function lunch()
         echo "Invalid lunch combo: $selection"
         return 1
     fi
+
+    check_product $product
 
     TARGET_PRODUCT=$product \
     TARGET_BUILD_VARIANT=$variant \
@@ -689,13 +699,13 @@ function tapas()
         return
     fi
 
-    local product=aosp_arm
+    local product=lluvia_arm
     case $arch in
-      x86)    product=aosp_x86;;
-      mips)   product=aosp_mips;;
-      arm64)  product=aosp_arm64;;
-      x86_64) product=aosp_x86_64;;
-      mips64)  product=aosp_mips64;;
+      x86)    product=lluvia_x86;;
+      mips)   product=lluvia_mips;;
+      arm64)  product=lluvia_arm64;;
+      x86_64) product=lluvia_x86_64;;
+      mips64)  product=lluvia_mips64;;
     esac
     if [ -z "$variant" ]; then
         variant=eng
