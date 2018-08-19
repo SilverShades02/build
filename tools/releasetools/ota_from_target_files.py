@@ -305,15 +305,16 @@ class BuildInfo(object):
     try:
       return self.info_dict.get("build.prop", {})[prop]
     except KeyError:
-      raise common.ExternalError("couldn't find %s in build.prop" % (prop,))
+      print ("WARNING: could not find %s in build.prop" % (prop,))
+    return None
 
   def GetVendorBuildProp(self, prop):
     """Returns the inquired vendor build property."""
     try:
       return self.info_dict.get("vendor.build.prop", {})[prop]
     except KeyError:
-      raise common.ExternalError(
-          "couldn't find %s in vendor.build.prop" % (prop,))
+      print ("WARNING: could not find %s in vendor.build.prop" % (prop,))
+    return None
 
   def GetOemProperty(self, key):
     if self.oem_props is not None and key in self.oem_props:
@@ -846,6 +847,15 @@ else if get_stage("%(bcb_dev)s") == "3/3" then
   script.Print("                                        ###      ");
   script.Print("       PRESENTED BY: Sriram && Srijith           ");
   script.Print("*************************************************");
+  script.Print(" ")
+  device = GetBuildProp("ro.lluvia.device", OPTIONS.info_dict)
+  modver = GetBuildProp("ro.lluvia.version", OPTIONS.info_dict)
+  if GetBuildProp("ro.product.model", OPTIONS.info_dict) is not None:
+    model = GetBuildProp("ro.product.model", OPTIONS.info_dict)
+    script.Print("Device: %s (%s)"%(model, device))
+  else:
+  	script.Print("Device: %s "%(device))
+  script.Print("Version: %s"%(modver));
 
   if OPTIONS.wipe_user_data:
     system_progress -= 0.1
