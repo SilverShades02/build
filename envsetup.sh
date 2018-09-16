@@ -565,9 +565,22 @@ add_lunch_combo aosp_mips64-eng
 add_lunch_combo aosp_x86-eng
 add_lunch_combo aosp_x86_64-eng
 
+function print_lluvia_ascii()
+{
+echo
+echo -e '\033[0;31m##       ##       ##     ## ##     ## ####    ###   '
+echo -e '\033[1;31m##       ##       ##     ## ##     ##  ##    ## ##  '
+echo -e '\033[0;33m##       ##       ##     ## ##     ##  ##   ##   ## '
+echo -e '\033[0;32m##       ##       ##     ## ##     ##  ##  ##     ##'
+echo -e '\033[0;34m##       ##       ##     ##  ##   ##   ##  #########'
+echo -e '\033[1;35m##       ##       ##     ##   ## ##    ##  ##     ##'
+echo -e '\033[0m   ######## ########  #######     ###    #### ##     ##'
+echo
+}
 function print_lunch_menu()
 {
     local uname=$(uname)
+    print_lluvia_ascii
     echo
     echo "You're building on" $uname
     echo
