@@ -3068,30 +3068,9 @@ $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) \
 	   $(if $(OEM_OTA_CONFIG), -o $(OEM_OTA_CONFIG)) \
 	   $(BUILT_TARGET_FILES_PACKAGE) $@
 
-LLUVIA_TARGET_PACKAGE := $(PRODUCT_OUT)/$(LLUVIA_MOD_VERSION).zip
- .PHONY: otapackage bacon
+ .PHONY: otapackage
 otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
-bacon: otapackage
-	$(hide) ln -f $(INTERNAL_OTA_PACKAGE_TARGET) $(LLUVIA_TARGET_PACKAGE)
-	$(hide) $(MD5SUM) $(LLUVIA_TARGET_PACKAGE) > $(LLUVIA_TARGET_PACKAGE).md5sum
 
-	echo -e ${CL_CYN}"                                                "${CL_RST}
-	echo -e ${CL_CYN}" ██▓     ██▓     █    ██  ██▒   █▓ ██▓ ▄▄▄      "${CL_RST}
-	echo -e ${CL_CYN}"▓██▒    ▓██▒     ██  ▓██▒▓██░   █▒▓██▒▒████▄    "${CL_RST}
-	echo -e ${CL_CYN}"▒██░    ▒██░    ▓██  ▒██░ ▓██  █▒░▒██▒▒██  ▀█▄  "${CL_RST}
-	echo -e ${CL_CYN}"▒██░    ▒██░    ▓▓█  ░██░  ▒██ █░░░██░░██▄▄▄▄██ "${CL_RST}
-	echo -e ${CL_CYN}"░██████▒░██████▒▒▒█████▓    ▒▀█░  ░██░ ▓█   ▓██▒"${CL_RST}
-	echo -e ${CL_CYN}"░ ▒░▓  ░░ ▒░▓  ░░▒▓▒ ▒ ▒    ░ ▐░  ░▓   ▒▒   ▓▒█░"${CL_RST}
-	echo -e ${CL_CYN}"░ ░ ▒  ░░ ░ ▒  ░░░▒░ ░ ░    ░ ░░   ▒ ░  ▒   ▒▒ ░"${CL_RST}
-	echo -e ${CL_CYN}"  ░ ░     ░ ░    ░░░ ░ ░      ░░   ▒ ░  ░   ▒   "${CL_RST}
-	echo -e ${CL_CYN}"    ░  ░    ░  ░   ░           ░   ░        ░  ░"${CL_RST}
-  	echo -e ${CL_CYN}"                            ░                   "${CL_RST}
-	echo -e ${CL_CYN}"                                                "${CL_RST}
-	@echo -e ${CL_BLD}${CL_CYN}"==========================-Package complete-=========================="${CL_RST}
-	@echo -e ${CL_BLD}${CL_YLW}"Zip: "${CL_YLW} $(LLUVIA_TARGET_PACKAGE)${CL_RST}
-	@echo -e ${CL_BLD}${CL_YLW}"MD5: "${CL_YLW}" `cat $(LLUVIA_TARGET_PACKAGE).md5sum | awk '{print $$1}' `"${CL_RST}
-	@echo -e ${CL_BLD}${CL_YLW}"Size:"${CL_YLW}" `du -sh $(LLUVIA_TARGET_PACKAGE) | awk '{print $$1}' `"${CL_RST}
-	@echo -e ${CL_BLD}${CL_CYN}"======================================================================"${CL_RST}
 
 endif    # build_ota_package
 
